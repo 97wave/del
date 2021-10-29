@@ -30,8 +30,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='the-best-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', default=False)
 
-def comma_separated_list(value: str) -> list:
-    return [x.strip() for x in value.split(',') if x.strip()]
+# def comma_separated_list(value: str) -> list:
+#     return [x.strip() for x in value.split(',') if x.strip()]
 
 ALLOWED_HOSTS = comma_separated_list(os.getenv('ALLOWED_HOSTS', default=''))
 
