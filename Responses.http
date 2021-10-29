@@ -1,0 +1,93 @@
+@baseUrl = http://127.0.0.1:8000/api/v1
+
+GET {{baseUrl}}/projects/
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/projects/1
+Accept: application/json
+
+###
+
+POST {{baseUrl}}/projects/
+Content-Type:  application/json
+
+{
+    "name": "Yfpdfybt",
+    "latitude": 25.1,
+    "longitude": 10.9
+}
+
+###
+
+DELETE {{baseUrl}}/projects/3/
+Content-Type: application/json
+
+###
+
+PATCH {{baseUrl}}/projects/2/
+Content-Type: application/json
+
+{
+    "name": "Яндекс.погода"
+}
+
+###
+
+PUT {{baseUrl}}/projects/5/
+Content-Type:  application/json
+
+{
+    "name": "1111111111111111",
+    "latitude": 333,
+    "longitude": 222
+}
+
+
+############
+############
+############
+
+
+GET {{baseUrl}}/measurements/
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/measurements/3
+Accept: application/json
+
+###
+
+POST {{baseUrl}}/measurements/
+Content-Type:  application/json
+
+{
+    "value": 25,
+    "project": 8
+}
+
+###
+
+DELETE {{baseUrl}}/measurements/3/
+Content-Type: application/json
+
+###
+
+PATCH {{baseUrl}}/measurements/4/
+Content-Type: application/json
+
+{
+    "value": 10
+}
+
+###
+
+PUT {{baseUrl}}/measurements/5/
+Content-Type:  application/json
+
+{
+    "project": 9, 
+    "value": 1500
+}
