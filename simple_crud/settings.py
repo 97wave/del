@@ -157,26 +157,26 @@ REST_FRAMEWORK = {
 
 django_heroku.settings(locals())
 
-if DEBUG:
-    ALLOWED_HOSTS = '*'
+# if DEBUG:
+#     ALLOWED_HOSTS = '*'
 
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
-        },
-        'root': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-        },
-        'loggers': {
-            'django.db': {
-                'handlers': ['console'],
-                'level': os.getenv('DJANGO_LOG_LEVEL', default='DEBUG'),
-                'propagate': False,
-            },
-        },
-    }
+#     LOGGING = {
+#         'version': 1,
+#         'disable_existing_loggers': False,
+#         'handlers': {
+#             'console': {
+#                 'class': 'logging.StreamHandler',
+#             },
+#         },
+#         'root': {
+#             'handlers': ['console'],
+#             'level': 'WARNING',
+#         },
+#         'loggers': {
+#             'django.db': {
+#                 'handlers': ['console'],
+#                 'level': os.getenv('DJANGO_LOG_LEVEL', default='DEBUG'),
+#                 'propagate': False,
+#             },
+#         },
+#     }
