@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import django_heroku
 from pathlib import Path
+import os
+from django.urls import reverse_lazy
+from dotenv import load_dotenv
+import django_heroku
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'j$1(ig@@#+2-ismgv-!xayzd^g*9ryzf_h(pfk6%p18-5$yrl^'
+SECRET_KEY = os.getenv('SECRET_KEY', default='the-best-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['0.0.0.0']
+def comma_separated_list(value: str) -> list:
+    return [x.strip() for x in value.split(',') if x.strip()]
+
+ALLOWED_HOSTS = comma_separated_list(os.getenv('ALLOWED_HOSTS', default=''))
 
 
 # Application definition
@@ -77,12 +85,13 @@ WSGI_APPLICATION = 'simple_crud.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'drf',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('DB_USER', default='webchat'),
+        'PASSWORD': os.getenv('DB_PASSWORD', default='webchat'),
+        'HOST': os.getenv('DB_HOST', default='localhost'),
+        'PORT': int(os.getenv('DB_PORT', default=5432)),
+        'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -125,6 +134,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'assets',
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -139,3 +156,27 @@ REST_FRAMEWORK = {
 }
 
 django_heroku.settings(locals())
+
+if DEBUG:
+    ALLOWED_HOSTS = '*'
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+        'loggers': {
+            'django.db': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', default='DEBUG'),
+                'propagate': False,
+            },
+        },
+    }
